@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1783829211159,
+      "tag": "0000_rapid_wraith",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1783829752434,
+      "tag": "0001_orange_nightshade",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1783952362660,
+      "tag": "0002_wealthy_proudstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1784066496205,
+      "tag": "0003_lying_tattoo",
+      "breakpoints": true
+    }
+  ]
+}

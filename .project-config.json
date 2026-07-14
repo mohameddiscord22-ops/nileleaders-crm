@@ -1,0 +1,42 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": [
+    "db",
+    "server",
+    "user"
+  ],
+  "dev_command": "pnpm run dev",
+  "env_vars": {
+    "DATABASE_URL": "mysql://38aUnrF1y89orG4.root:XAywUMLiH45G5J730oYl@gateway03.us-east-1.prod.aws.tidbcloud.com:4000/b8BmM9LeS4LhmLyJyDDTo2?ssl={\"rejectUnauthorized\":true}"
+  },
+  "experiments": [
+    "no_db_push"
+  ],
+  "git_remote": {
+    "repo_url": "https://7f0548f6b28a1758d9bf7be630d36cb4.artifacts.cloudflare.net/git/prod/b8BmM9LeS4LhmLyJyDDTo2.git",
+    "expiration": "2026-07-13T04:06:23.609Z",
+    "token": "art_v1_3ade46b9022f884b76f6355a5ed5fc489e256cbd?expires=1783915583",
+    "backend": "GIT_BACKEND_ARTIFACTS"
+  },
+  "name": "nileleaders-crm-app",
+  "path": "/home/ubuntu/nileleaders-crm-app",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "8zb987LScgJRxidj8ZbmRk",
+    "BUILT_IN_FORGE_API_URL": "https://forge.manus.ai",
+    "JWT_SECRET": "ZaHg3hHgsybMtYt9iKdopd",
+    "OAUTH_SERVER_URL": "https://api.manus.im",
+    "OWNER_NAME": "Mohamed Ahmed",
+    "OWNER_OPEN_ID": "R5KSpPWReqBdNAwkrEkqvw",
+    "VITE_ANALYTICS_ENDPOINT": "https://manus-analytics.com",
+    "VITE_ANALYTICS_WEBSITE_ID": "ebb13339-1225-4667-bf9b-32c20aefc0b9",
+    "VITE_APP_ID": "b8BmM9LeS4LhmLyJyDDTo2",
+    "VITE_APP_LOGO": "https://files.manuscdn.com/user_upload_by_module/web_dev_logo/310519663823798273/QoSsFgZvgXCljRNE.png",
+    "VITE_APP_TITLE": "Nile Leaders CRM",
+    "VITE_FRONTEND_FORGE_API_KEY": "Psd7EuCK5P2HW9prMyBg6U",
+    "VITE_FRONTEND_FORGE_API_URL": "https://forge.manus.ai",
+    "VITE_OAUTH_PORTAL_URL": "https://manus.im"
+  },
+  "template_id": "web-db-user",
+  "test_command": "pnpm test"
+}
