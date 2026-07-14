@@ -1,5 +1,14 @@
-[install]
+[phases.setup]
+nixPkgs = ["nodePackages.pnpm"]
+
+[phases.install]
+dependsOn = ["setup"]
 cmds = ["pnpm install --no-frozen-lockfile"]
 
-[build]
+[phases.build]
+dependsOn = ["install"]
 cmds = ["pnpm build"]
+
+[start]
+cmd = "pnpm start"
+
