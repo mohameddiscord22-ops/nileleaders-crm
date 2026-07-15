@@ -36,16 +36,22 @@ async function startServer() {
   app.disable("x-powered-by");
   app.use((req, res, next) => {
     const origin = req.headers.origin;
-    const allowedOrigin = process.env.FRONTEND_URL;
+    const allowedOrigins = [
+      process.env.FRONTEND_URL,
+      "https://leads-6a67c.web.app",
+      "https://leads-6a67c.firebaseapp.com",
+      "http://localhost:5173",
+      "http://localhost:3000"
+    ].filter(Boolean);
     
-    if (allowedOrigin && origin === allowedOrigin) {
+    if (origin && (allowedOrigins.includes(origin) || allowedOrigins.includes("*"))) {
       res.setHeader("Access-Control-Allow-Origin", origin);
-    } else if (!allowedOrigin) {
+    } else if (allowedOrigins.length === 0 || allowedOrigins.includes("*")) {
       res.setHeader("Access-Control-Allow-Origin", "*");
     }
     
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type,Authorization");
+    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type,Authorization,trpc-batch-mode");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     
     if (req.method === "OPTIONS") {
