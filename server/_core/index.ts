@@ -63,6 +63,12 @@ async function startServer() {
 
   // Health check for Railway/Render
   app.get("/health", (req, res) => res.status(200).json({ status: "ok", timestamp: new Date().toISOString() }));
+  app.get("/ping", (req, res) => res.status(200).send("pong"));
+
+  // Sanitize DATABASE_URL to remove any accidental spaces or hidden characters
+  if (process.env.DATABASE_URL) {
+    process.env.DATABASE_URL = process.env.DATABASE_URL.trim();
+  }
 
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
