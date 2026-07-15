@@ -35,30 +35,30 @@ async function startServer() {
   // Security & CORS
   app.disable("x-powered-by");
   
-  // Robust CORS middleware
+  // Ultra-robust CORS middleware for production debugging
   app.use((req, res, next) => {
     const origin = req.headers.origin;
-    // Always allow the known frontend and common dev origins
-    const allowedOrigins = [
-      "https://leads-6a67c.web.app",
-      "https://leads-6a67c.firebaseapp.com",
-      process.env.FRONTEND_URL
-    ].filter(Boolean);
-
-    if (origin) {
-      res.setHeader("Access-Control-Allow-Origin", origin);
-    } else {
-      res.setHeader("Access-Control-Allow-Origin", "*");
-    }
     
+    // In production troubleshooting, we allow all origins that match our known frontend
+    // or just allow all if we're hitting 502 issues to isolate the problem
+    res.setHeader("Access-Control-Allow-Origin", origin || "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Authorization,trpc-batch-mode");
+    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Authorization,trpc-batch-mode,trpc-batch-mode");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     
     if (req.method === "OPTIONS") {
       return res.sendStatus(200);
     }
     next();
+  });
+
+  // Global Error Handler to prevent 502s from silent crashes
+  app.use((err: any, req: any, res: any, next: any) => {
+    console.error("[Global Error Handler]:", err);
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: process.env.NODE_ENV === "development" ? err.message : undefined
+    });
   });
 
   // Health check for Railway/Render
