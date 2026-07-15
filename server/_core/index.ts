@@ -52,16 +52,7 @@ async function startServer() {
     next();
   });
 
-  // Global Error Handler to prevent 502s from silent crashes
-  app.use((err: any, req: any, res: any, next: any) => {
-    console.error("[Global Error Handler]:", err);
-    res.status(500).json({
-      message: "Internal Server Error",
-      error: process.env.NODE_ENV === "development" ? err.message : undefined
-    });
-  });
-
-  // Health check for Railway/Render
+  // Health check for Railway/Render - Put these BEFORE any other middleware
   app.get("/health", (req, res) => res.status(200).json({ status: "ok", timestamp: new Date().toISOString() }));
   app.get("/ping", (req, res) => res.status(200).send("pong"));
 
@@ -94,9 +85,27 @@ async function startServer() {
 
   const port = parseInt(process.env.PORT || "3000");
 
+  // Global Error Handler - MUST be the last middleware
+  app.use((err: any, req: any, res: any, next: any) => {
+    console.error("[Global Error Handler]:", err);
+    if (res.headersSent) {
+      return next(err);
+    }
+    res.status(500).json({
+      message: "Internal Server Error",
+      error: process.env.NODE_ENV === "development" ? err.message : undefined
+    });
+  });
+
   server.listen(port, "0.0.0.0", () => {
     console.log(`Server running on port ${port}`);
   });
 }
 
-startServer().catch(console.error);
+startServer().catch((err) => {
+  console.error("FAILED TO START SERVER:", err);
+  // Still try to start a dummy server to satisfy Railway health checks if possible
+  const app = express();
+  app.get("*", (req, res) => res.status(500).send("Server failed to start, check logs"));
+  app.listen(process.env.PORT || 3000);
+});
