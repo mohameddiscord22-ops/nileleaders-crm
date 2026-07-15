@@ -31,19 +31,21 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
+  const port = parseInt(process.env.PORT || "3000");
+
+  // Start listening IMMEDIATELY to satisfy Railway health checks
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`[Server] Listening on port ${port} - Bootstrapping starting...`);
+  });
 
   // Security & CORS
   app.disable("x-powered-by");
   
-  // Ultra-robust CORS middleware for production debugging
+  // Simplest possible CORS for troubleshooting
   app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    
-    // In production troubleshooting, we allow all origins that match our known frontend
-    // or just allow all if we're hitting 502 issues to isolate the problem
-    res.setHeader("Access-Control-Allow-Origin", origin || "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Authorization,trpc-batch-mode,trpc-batch-mode");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Headers", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     
     if (req.method === "OPTIONS") {
@@ -97,9 +99,7 @@ async function startServer() {
     });
   });
 
-  server.listen(port, "0.0.0.0", () => {
-    console.log(`Server running on port ${port}`);
-  });
+  console.log("[Server] Bootstrap complete");
 }
 
 startServer().catch((err) => {
