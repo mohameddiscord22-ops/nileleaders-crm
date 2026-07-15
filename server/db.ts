@@ -8,9 +8,11 @@ let _db: ReturnType<typeof drizzle> | null = null;
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
+      console.log("[Database] Attempting to connect to:", process.env.DATABASE_URL?.split('@')[1] || "unknown host");
       _db = drizzle(process.env.DATABASE_URL);
+      console.log("[Database] Connection initialized");
     } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
+      console.error("[Database] CRITICAL CONNECTION ERROR:", error);
       _db = null;
     }
   }

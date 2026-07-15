@@ -34,24 +34,25 @@ async function startServer() {
 
   // Security & CORS
   app.disable("x-powered-by");
+  
+  // Robust CORS middleware
   app.use((req, res, next) => {
     const origin = req.headers.origin;
+    // Always allow the known frontend and common dev origins
     const allowedOrigins = [
-      process.env.FRONTEND_URL,
       "https://leads-6a67c.web.app",
       "https://leads-6a67c.firebaseapp.com",
-      "http://localhost:5173",
-      "http://localhost:3000"
+      process.env.FRONTEND_URL
     ].filter(Boolean);
-    
-    if (origin && (allowedOrigins.includes(origin) || allowedOrigins.includes("*"))) {
+
+    if (origin) {
       res.setHeader("Access-Control-Allow-Origin", origin);
-    } else if (allowedOrigins.length === 0 || allowedOrigins.includes("*")) {
+    } else {
       res.setHeader("Access-Control-Allow-Origin", "*");
     }
     
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type,Authorization,trpc-batch-mode");
+    res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,Content-Type,Authorization,trpc-batch-mode");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     
     if (req.method === "OPTIONS") {
