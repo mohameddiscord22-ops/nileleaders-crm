@@ -23,8 +23,8 @@ export async function createContext(
       user = await getUserById(session.userId) ?? null;
     }
 
-    // 2. Fallback to SDK/OAuth auth if local fails
-    if (!user) {
+    // 2. Fallback to SDK/OAuth auth if local fails AND OAuth is configured
+    if (!user && process.env.OAUTH_SERVER_URL) {
       user = await sdk.authenticateRequest(opts.req);
     }
   } catch (error) {
