@@ -85,8 +85,6 @@ async function startServer() {
     serveStatic(app);
   }
 
-  const port = parseInt(process.env.PORT || "3000");
-
   // Global Error Handler - MUST be the last middleware
   app.use((err: any, req: any, res: any, next: any) => {
     console.error("[Global Error Handler]:", err);
