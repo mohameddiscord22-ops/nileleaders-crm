@@ -33,25 +33,26 @@ async function startServer() {
   const server = createServer(app);
   const port = parseInt(process.env.PORT || "3000");
 
-  // Start listening IMMEDIATELY to satisfy Railway health checks
-  server.listen(port, "0.0.0.0", () => {
-    console.log(`[Server] Listening on port ${port} - Bootstrapping starting...`);
-  });
-
   // Security & CORS
   app.disable("x-powered-by");
   
-  // Simplest possible CORS for troubleshooting
+  // ULTRA-WIDE CORS for production debugging
   app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "*");
-    res.setHeader("Access-Control-Allow-Headers", "*");
+    const origin = req.headers.origin;
+    res.setHeader("Access-Control-Allow-Origin", origin || "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, trpc-batch-mode");
     res.setHeader("Access-Control-Allow-Credentials", "true");
     
     if (req.method === "OPTIONS") {
       return res.sendStatus(200);
     }
     next();
+  });
+
+  // Start listening EARLY
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`[Server] Listening on port ${port}`);
   });
 
   // Health check for Railway/Render - Put these BEFORE any other middleware

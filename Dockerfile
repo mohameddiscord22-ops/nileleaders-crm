@@ -21,5 +21,5 @@ RUN pnpm build
 # Expose the port
 EXPOSE 3000
 
-# Start the application
-CMD ["pnpm", "start"]
+# Start the application directly with node for better reliability
+CMD ["node", "dist/index.js"]
